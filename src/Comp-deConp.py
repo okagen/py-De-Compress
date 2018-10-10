@@ -29,7 +29,7 @@ def delDir(tgtParentDir, delDirName):
         shutil.rmtree(delDir)
         
 # ------------------------------------------------------
-# 指定した圧縮ファイルの中から、指定した拡張子のファイルを週出する。
+# 指定した圧縮ファイルの中から、指定した拡張子のファイルを抽出する。
 def do_extract(sevenZipExePath, tgtParentDir, cmpressedFileName, extExt, outputDirName):
     """Extract some files from a compressed file by using extension.
     Arguments:
@@ -48,6 +48,29 @@ def do_extract(sevenZipExePath, tgtParentDir, cmpressedFileName, extExt, outputD
     cmd = '"' + sevenZipExePath +  '"' + ' -aoa e ' \
             +  '"' + tgtFile + '"' \
             + ' -o' + '"' + extDir +  '"' + " " + extExt
+    chk = subprocess.getoutput(cmd)
+    return chk
+
+
+# ------------------------------------------------------
+# 指定した圧縮ファイルの中から、指定したファイルを抽出する。
+def do_extract_file(sevenZipExePath, tgtParentDir, cmpressedFileName, tgtFileName, outputDirName):
+    """Extract some files from a compressed file by using extension.
+    Arguments:
+        sevenZipExePath: full path of the 7zip exe(7z.exe).
+        tgtParentDir: path of the directory which includes some compressed files.
+        cmpressedFileName: name of compressed file which extract some filese form.
+            e.g.) 'abc.lzh'
+        tgtFileName: name of file to be extruded.
+        outputDirName: name of directory in which the extracted files saved.
+    Returns:
+        result of subprocess.getoutput(cmd)
+    """    
+    tgtFile = os.path.join(tgtParentDir, cmpressedFileName)
+    extDir = os.path.join(tgtParentDir, outputDirName)
+    cmd = '"' + sevenZipExePath +  '"' + ' -aoa e ' \
+            +  '"' + tgtFile + '"' \
+            + ' -o' + '"' + extDir +  '"' + " " + tgtFileName
     chk = subprocess.getoutput(cmd)
     return chk
 
@@ -104,15 +127,17 @@ def getFileListByExt(tgtDir, tgtExt):
     
     return retFiles
 
+
+
 if __name__=='__main__':
 
     sevenZipExePath = r'C:\Program Files\7-Zip\7z.exe'
     tgtDir = r'C:\work\GitHub\py[De]Compress\data'
-    ext = '*.wav'
+    extWav = '*.wav'
     extLzh = '.lzh'
  
     print()
-    print( '■■■■■■■' )
+    print( '===== start new process =====' )
         
     # ------------------------------------------------------
     # 指定したディレクトリ内の指定した拡張子のファイルのリストを取得
@@ -133,7 +158,7 @@ if __name__=='__main__':
     
         #wavファイル抽出
         print( '-----  extracting  -----' )
-        chk = do_extract(sevenZipExePath, tgtDir, fileName, ext, outputDirName)
+        chk = do_extract(sevenZipExePath, tgtDir, fileName, extWav, outputDirName)
         print( chk )
     
         #一時的に展開したwavファイルの数をカウント
@@ -148,3 +173,5 @@ if __name__=='__main__':
         #一時的にファイルを展開したディレクトリを削除
         delDir(tgtDir, outputDirName)
         print( '-----  ' + fileName + ':::finish  -----' )
+
+    print( '===== complete =====' )
