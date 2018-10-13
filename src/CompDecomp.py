@@ -132,7 +132,7 @@ def getFileListByExt(tgtDir, tgtExt):
 if __name__=='__main__':
 
     sevenZipExePath = r'C:\Program Files\7-Zip\7z.exe'
-    tgtDir = r'C:\work\GitHub\py[De]Compress\data'
+    tgtDir = r'C:\work\GitHub\pyCompDecomp\data'
     extWav = '*.wav'
     extLzh = '.lzh'
  
@@ -150,28 +150,27 @@ if __name__=='__main__':
         outputDirName = lzhFileName_base
         newFileName = outputDirName + ".zip"
 
-        print( '-----  start:::' + fileName + '  -----' )
+        #print( '-----  start:::,' + fileName)
         
         #一時的にファイルを展開するディレクトリを作成
         delDir(tgtDir, outputDirName)
         makeDir(tgtDir, outputDirName)
     
         #wavファイル抽出
-        print( '-----  extracting  -----' )
+        #print( '-----  extracting' )
         chk = do_extract(sevenZipExePath, tgtDir, fileName, extWav, outputDirName)
-        print( chk )
+        #print( chk )
     
         #一時的に展開したwavファイルの数をカウント
-        print( '-----  count files  -----' )
-        print(countFiles(tgtDir, outputDirName))
+        print('-----,' + fileName + ',,,' + str(countFiles(tgtDir, outputDirName)))
         
         #一時的にファイルを展開したディレクトリをzipで圧縮
-        print( '-----  comressing  -----' )
+        #print( '-----  comressing  -----' )
         chk = do_compress(sevenZipExePath, tgtDir, outputDirName, newFileName)
-        print( chk )
+        #print( chk )
         
         #一時的にファイルを展開したディレクトリを削除
         delDir(tgtDir, outputDirName)
-        print( '-----  ' + fileName + ':::finish  -----' )
+        #print( 'finish  -----' )
 
-    print( '===== complete =====' )
+    print( '===== finish process =====' )
